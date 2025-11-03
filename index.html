@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Chat App UI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="chat-container">
+        <!-- Contacts Sidebar -->
+        <aside id="contacts-sidebar">
+            <header>
+                <h2>Contacts</h2>
+            </header>
+            <ul id="contact-list">
+                <!-- Contacts will be injected here by JS -->
+            </ul>
+        </aside>
+
+        <!-- Main Chat Window -->
+        <main id="chat-window">
+            <div id="chat-header">
+                <!-- Current contact details / Back button (mobile) -->
+            </div>
+            <div id="messages-area">
+                <!-- Messages will be injected here -->
+            </div>
+            <div id="typing-indicator-area" class="hidden">
+                <!-- Typing indicator will be rendered here -->
+            </div>
+            <div id="message-input-area">
+                <input type="text" id="message-input" placeholder="Type a message...">
+                <button id="send-button">Send</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js" type="module"></script>
+</body>
+</html>
