@@ -1,0 +1,382 @@
+:root {
+    --primary-color: #0084ff; /* Messenger blue */
+    --secondary-color: #e5e5ea; /* Light grey for received messages */
+    --background-color: #f0f2f5; /* App background */
+    --chat-background: #ffffff;
+    --text-color: #1c1e21;
+    --border-color: #dddfe2;
+    --bubble-radius: 18px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+#chat-container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    height: 90vh;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: var(--chat-background);
+}
+
+/* -------------------- Contacts Sidebar -------------------- */
+#contacts-sidebar {
+    width: 300px;
+    min-width: 250px;
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    background-color: var(--chat-background);
+}
+
+#contacts-sidebar header {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#contacts-sidebar h2 {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+#contact-list {
+    list-style: none;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.contact-item:hover,
+.contact-item.active {
+    background-color: #e9ebee;
+}
+
+.contact-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.contact-info {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.contact-info h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+    color: var(--text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.contact-status {
+    font-size: 0.8rem;
+    color: #606770;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* -------------------- Main Chat Window -------------------- */
+#chat-window {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#chat-header {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--chat-background);
+}
+
+#chat-header .contact-info {
+    margin-left: 10px;
+}
+
+#chat-header .contact-info h4 {
+    margin: 0;
+}
+
+#chat-header .contact-status {
+    font-size: 0.85rem;
+    color: #4CAF50; /* Active color */
+}
+
+#messages-area {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: var(--background-color);
+}
+
+/* Message Bubble Styling */
+.message {
+    display: flex;
+    max-width: 80%;
+}
+
+.message.received {
+    justify-content: flex-start;
+    align-self: flex-start;
+}
+
+.message.sent {
+    justify-content: flex-end;
+    align-self: flex-end;
+    margin-left: auto; /* Push to the right */
+}
+
+.message-content {
+    display: flex;
+    gap: 5px;
+    align-items: flex-end;
+}
+
+.message-bubble {
+    padding: 10px 15px;
+    border-radius: var(--bubble-radius);
+    line-height: 1.4;
+    font-size: 0.95rem;
+    max-width: 100%;
+    word-wrap: break-word;
+}
+
+.message.sent .message-bubble {
+    background-color: var(--primary-color);
+    color: white;
+    border-bottom-right-radius: 4px; 
+}
+
+.message.received .message-bubble {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border-bottom-left-radius: 4px;
+}
+
+.message-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.message.sent .message-avatar {
+    display: none; 
+}
+
+.message-timestamp {
+    display: none; /* Hide timestamp by default in bubbles, only used in JS for rendering */
+}
+
+/* Typing Indicator */
+#typing-indicator-area {
+    padding: 0 15px 5px;
+    transition: opacity 0.3s;
+}
+
+#typing-indicator-area.hidden {
+    display: none;
+}
+
+.typing-indicator {
+    align-self: flex-start;
+}
+
+.typing-indicator .message-content {
+    align-items: center;
+}
+
+.typing-indicator .message-bubble {
+    background-color: var(--secondary-color);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 36px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.typing-dot {
+    width: 6px;
+    height: 6px;
+    background-color: #8a8d91;
+    border-radius: 50%;
+    opacity: 0;
+    animation: typing 1s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(1) { animation-delay: 0s; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing {
+    0%, 100% { transform: translateY(0); opacity: 0.5; }
+    50% { transform: translateY(-3px); opacity: 1; }
+}
+
+/* Input Area */
+#message-input-area {
+    display: flex;
+    padding: 10px 15px;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--chat-background);
+    align-items: center;
+}
+
+#message-input {
+    flex-grow: 1;
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    margin-right: 10px;
+    font-size: 1rem;
+    outline: none;
+    background-color: #f0f2f5;
+}
+
+#send-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 0; /* Hide text, use icon if possible, but for simplicity we'll just style it */
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#send-button::after {
+    content: '↑'; /* Placeholder icon for send */
+    font-size: 1.2rem;
+    line-height: 1;
+    transform: rotate(45deg);
+}
+
+#send-button:hover {
+    background-color: #0056b3;
+}
+
+/* -------------------- Mobile Responsiveness -------------------- */
+@media (max-width: 768px) {
+    body {
+        min-height: 100vh;
+        align-items: stretch;
+    }
+
+    #chat-container {
+        height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+        flex-direction: column;
+    }
+
+    #contacts-sidebar {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        border-right: none;
+    }
+
+    #chat-window {
+        /* Default to being hidden on mobile load */
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+    }
+
+    #chat-window, #contacts-sidebar {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    /* Mobile navigation management using JS classes */
+    .mobile-view-contacts #contacts-sidebar {
+        transform: translateX(0);
+        display: flex; /* Ensure display property is set if we rely on transform */
+    }
+
+    .mobile-view-contacts #chat-window {
+        transform: translateX(100%);
+        display: none; /* Keep it display none initially until JS toggles for performance/layout */
+    }
+
+    .mobile-view-chat #contacts-sidebar {
+        transform: translateX(-100%);
+        display: none;
+    }
+
+    .mobile-view-chat #chat-window {
+        transform: translateX(0);
+        display: flex;
+    }
+
+    /* Back button style */
+    .back-button {
+        display: block;
+        font-size: 2rem;
+        padding-right: 10px;
+        cursor: pointer;
+        color: var(--primary-color);
+    }
+
+    .desktop-only-header {
+        display: none;
+    }
+
+}
+
+/* Desktop styles adjustment (Hide back button) */
+@media (min-width: 769px) {
+    .back-button {
+        display: none !important;
+    }
+    .desktop-only-header {
+        display: block;
+    }
+    /* Ensure chat window is displayed side-by-side */
+    #chat-window {
+        display: flex !important; 
+    }
+}
